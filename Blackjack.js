@@ -15,67 +15,76 @@ const sumEl = document.getElementById("sum-el");
 const cardsEl = document.getElementById("cards-el");
 const playerEl = document.getElementById("player-el");
 
-// Display initial player information
+playerEl.textContent = `${player.name}: $${player.chips}`;
+
 function updatePlayerChips() {
     playerEl.textContent = `${player.name}: $${player.chips}`;
 }
 
-// Simple bet function without error handling
 function bet(amount) {
     if (player.chips >= amount) {
         player.chips -= amount;
         updatePlayerChips();
         return true;
     } else {
-        // Optionally, you can still set a message if needed
-        // setMessage("Error: Insufficient balance.");
+        setMessage("Error: Insufficient chips.");
         return false;
     }
 }
 
-// Handle winning
 function win(amount) {
     player.chips += amount;
     updatePlayerChips();
 }
 
-// Handle losing
 function lose(amount) {
     player.chips -= amount;
     updatePlayerChips();
 }
 
-// Betting functions for specific amounts
-function bet50() {
-    return bet(50);
+function betPrompt() {
+    const betAmount = prompt("How much would you like to bet?");
+    if (betAmount !== null) {
+        startGame(parseInt(betAmount, 10));
+    }
 }
 
-function bet100() {
-    return bet(100);
+function getRandomCard() {
+    return Math.floor(Math.random() * 13) + 1;
 }
 
-function bet150() {
-    return bet(150);
+function calculateSum(cards) {
+    let sum = 0;
+    let numberOfAces = 0;
+
+    for (const card of cards) {
+        if (card === 1) {
+            sum += 11;
+            numberOfAces++;
+        } else if (card > 10) {
+            sum += 10;
+        } else {
+            sum += card;
+        }
+    }
+
+    while (sum > 21 && numberOfAces > 0) {
+        sum -= 10;
+        numberOfAces--;
+    }
+
+    return sum;
 }
 
-function bet200() {
-    return bet(200);
-}
-
-// Start the game with a specific bet amount
 function startGame(betAmount) {
     if (bet(betAmount)) {
         isAlive = true;
-        let firstCard = getRandomCard();
-        let secondCard = getRandomCard();
-        cards = [firstCard, secondCard];
-        sum = firstCard + secondCard;
+        cards = [getRandomCard(), getRandomCard()];
+        sum = calculateSum(cards);
         renderGame();
     }
 }
 
-// Display the current game state
-// Display the current game state
 function renderGame() {
     cardsEl.textContent = "Cards: ";
     for (const card of cards) {
@@ -95,8 +104,6 @@ function renderGame() {
     messageEl.textContent = message;
 }
 
-
-// Draw a new card
 function newCard() {
     if (isAlive && !hasBlackJack) {
         const card = getRandomCard();
@@ -106,7 +113,9 @@ function newCard() {
     }
 }
 
-// Set a message in the message element
 function setMessage(msg) {
     messageEl.textContent = msg;
 }
+
+// Add an event listener to the "Start Game" button to initiate the bet prompt
+document.getElementById("start-game-btn").addEventListener("click", betPrompt);
