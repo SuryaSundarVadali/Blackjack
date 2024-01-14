@@ -1,6 +1,7 @@
 const player = {
     name: "Per",
-    chips: 200
+    chips: 20000,
+    currentbet:0,
 };
 
 let cards = [];
@@ -24,6 +25,7 @@ function updatePlayerChips() {
 function bet(amount) {
     if (player.chips >= amount) {
         player.chips -= amount;
+        player.currentbet = amount;
         updatePlayerChips();
         return true;
     } else {
@@ -33,20 +35,13 @@ function bet(amount) {
 }
 
 function win(amount) {
-    player.chips += amount;
+    player.chips += (2*amount);
     updatePlayerChips();
 }
 
 function lose(amount) {
     player.chips -= amount;
     updatePlayerChips();
-}
-
-function betPrompt() {
-    const betAmount = prompt("How much would you like to bet?");
-    if (betAmount !== null) {
-        startGame(parseInt(betAmount, 10));
-    }
 }
 
 function getRandomCard() {
@@ -76,27 +71,64 @@ function calculateSum(cards) {
     return sum;
 }
 
-function startGame(betAmount) {
-    if (bet(betAmount)) {
-        isAlive = true;
+function startGame() {
+    isAlive = true;
+    cards = []; // Reset cards
+    sum = 0; // Reset sum
+    currentbet=0;
+    renderGame();
+}
+
+function bet50() {
+    if (bet(50)) {
         cards = [getRandomCard(), getRandomCard()];
         sum = calculateSum(cards);
-        renderGame();
+        startGame();
+    }
+}
+
+function bet100() {
+    if (bet(100)) {
+        cards = [getRandomCard(), getRandomCard()];
+        sum = calculateSum(cards);
+        startGame();
+    }
+}
+
+function bet150() {
+    if (bet(150)) {
+        cards = [getRandomCard(), getRandomCard()];
+        sum = calculateSum(cards);
+        startGame();
+    }
+}
+
+function bet200() {
+    if (bet(200)) {
+        cards = [getRandomCard(), getRandomCard()];
+        sum = calculateSum(cards);
+        startGame();
     }
 }
 
 function renderGame() {
-    cardsEl.textContent = "Cards: ";
-    for (const card of cards) {
-        cardsEl.textContent += `${card} `;
+    if (cards.length > 0) {
+        cardsEl.textContent = "Cards: ";
+        for (const card of cards) {
+            cardsEl.textContent += `${card} `;
+        }
+        sumEl.textContent = `Sum: ${sum}`;
+    } else {
+        cardsEl.textContent = "";
+        sumEl.textContent = "";
     }
 
-    sumEl.textContent = `Sum: ${sum}`;
     if (sum <= 20) {
         message = "Do you want to draw a new card?";
     } else if (sum === 21) {
         message = "You've got Blackjack!";
         hasBlackJack = true;
+        win(player.currentbet); // Add this line to call win when the player gets a Blackjack
     } else {
         message = "You're out of the game!";
         isAlive = false;
@@ -105,6 +137,10 @@ function renderGame() {
 }
 
 function newCard() {
+    if (player.currentbet <= 0) {
+        setMessage("Error: You must place a bet before drawing a new card.");
+        return;
+    }
     if (isAlive && !hasBlackJack) {
         const card = getRandomCard();
         sum += card;
@@ -117,5 +153,25 @@ function setMessage(msg) {
     messageEl.textContent = msg;
 }
 
-// Add an event listener to the "Start Game" button to initiate the bet prompt
-document.getElementById("start-game-btn").addEventListener("click", betPrompt);
+function resetGame() {
+    cards = [];
+    sum = 0;
+    hasBlackJack = false;
+    isAlive = false;
+    message = "";
+    messageEl.textContent = "";
+    sumEl.textContent = "";
+    cardsEl.textContent = "";
+}
+
+// Add an event listener to the "Start Game" button to reset the game and initiate the bet prompt
+document.getElementById("start-game-btn").addEventListener("click", function() {
+    resetGame();
+    betPrompt();
+});
+
+// Add event listeners to the bet buttons
+document.getElementById("bet-50-btn").addEventListener("click", bet50);
+document.getElementById("bet-100-btn").addEventListener("click", bet100);
+document.getElementById("bet-150-btn").addEventListener("click", bet150);
+document.getElementById("bet-200-btn").addEventListener("click", bet200);
