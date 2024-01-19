@@ -1,0 +1,15 @@
+{
+  "name": "blackjack",
+  "version": "1.0.0",
+  "description": "Welcome to the Blackjack Game project! This is a simple web-based implementation of the classic card game Blackjack. The game is built using HTML, CSS, and JavaScript.",
+  "main": "Blackjack.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
