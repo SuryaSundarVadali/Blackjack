@@ -45,8 +45,11 @@ function calculateSum(cards) {
     return sum;
 }
 
+let betPlaced = false;  
+
 app.post('/start-game', (req, res) => {
     isAlive = true;
+    betPlaced = false;
     cards = []; // Reset cards
     sum = 0; // Reset sum
     player.currentbet = 0;
@@ -54,6 +57,10 @@ app.post('/start-game', (req, res) => {
 });
 
 app.post('/bet', (req, res) => {
+    if (betPlaced) {
+        res.json({ message: 'Error: Bet already placed.' });
+        return;
+    }
     const amount = req.body.amount;
     if(amount <= 0) {
         res.json({ message: 'Error: Invalid bet.' });
@@ -67,7 +74,9 @@ app.post('/bet', (req, res) => {
     player.currentbet = amount;
     cards = [getRandomCard(), getRandomCard()];
     sum = calculateSum(cards);
+    betPlaced = true; // Set betPlaced to true
     res.json({ message: 'Bet placed.', cards: cards, sum: sum });
+    console.log(sum);
 });
 
 app.get('/status', (req, res) => {
@@ -115,6 +124,7 @@ app.post('/end-game', (req, res) => {
         player.chips += player.currentbet;
     }
     isAlive = false;
+    betPlaced = false;
     res.json({ message: message, player: player });
 });
 
