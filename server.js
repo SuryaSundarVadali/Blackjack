@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const app = express();
 const port = 5000;
 
@@ -16,28 +15,6 @@ let sum = 0;
 let hasBlackJack = false;
 let isAlive = false;
 let message = "";
-
-function updatePlayerChips() {
-    return `${player.name}: $${player.chips}`;
-}
-
-function bet(amount) {
-    if (player.chips >= amount) {
-        player.chips -= amount;
-        player.currentbet = amount;
-        return true;
-    } else {
-        return "Error: Insufficient chips.";
-    }
-}
-
-function win(amount) {
-    player.chips += 2 * amount;
-}
-
-function lose(amount) {
-    player.chips -= amount;
-}
 
 function getRandomCard() {
     return Math.floor(Math.random() * 13) + 1;
@@ -84,13 +61,11 @@ app.post('/bet', (req, res) => {
         res.json({ message: 'Error: Insufficient chips.' });
         return;
     }
-    if (bet(amount)) {
-        cards = [getRandomCard(), getRandomCard()];
-        sum = calculateSum(cards);
-        res.json({ message: 'Bet placed.', cards: cards, sum: sum });
-    } else {
-        res.json({ message: 'Error: Insufficient chips.' });
-    }
+    player.chips -= amount;
+    player.currentbet = amount;
+    cards = [getRandomCard(), getRandomCard()];
+    sum = calculateSum(cards);
+    res.json({ message: 'Bet placed.', cards: cards, sum: sum });
 });
 
 app.get('/status', (req, res) => {
@@ -119,6 +94,26 @@ app.post('/new-card', (req, res) => {
     }
 
     res.json({ cards: cards, sum: sum, isAlive: isAlive, hasBlackJack: hasBlackJack, message: message });
+});
+
+app.post('/end-game', (req, res) => {
+    const dealerSum = Math.floor(Math.random() * 5) + 17;
+    if (sum > 21) {
+        message = 'You went over 21! You lost!';
+    } else if (dealerSum > 21) {
+        message = 'Dealer went over 21! You won!';
+        player.chips += 2 * player.currentbet;
+    } else if (sum > dealerSum) {
+        message = 'You won!';
+        player.chips += 2 * player.currentbet;
+    } else if (sum < dealerSum) {
+        message = 'You lost!';
+    } else {
+        message = 'It\'s a draw!';
+        player.chips += player.currentbet;
+    }
+    isAlive = false;
+    res.json({ message: message, player: player });
 });
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
