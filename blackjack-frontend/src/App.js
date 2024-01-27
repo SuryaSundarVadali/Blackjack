@@ -5,18 +5,17 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { styled } from '@mui/system';
 
 const theme = createTheme();
-
 const StyledContainer = styled(Container)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   textAlign: 'center',
-  minHeight: '100vh',
+  height: '100vh',
   width: '100vw',
-  backgroundImage: 'url(/Blackjack.jpg)',
-  backgroundSize: 'cover',
-  backgroundRepeat: 'no-repeat', // Add this line
-  backgroundPosition: 'center', // Add this line
+  backgroundImage: 'url("/Blackjack.jpg")',
+  backgroundSize: 'cover', // Update backgroundSize property
+  backgroundRepeat: 'no-repeat',
+  boxSizing: 'border-box',
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -84,27 +83,25 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <StyledContainer component="main" maxWidth="xs">
+      <StyledContainer component="main">
         <CssBaseline />
-        <div>
           <Typography variant="h1" color="goldenrod">
             Blackjack
           </Typography>
-          <div>
-            <Typography variant="p" id="message-el">
+            <Typography variant="p" id="message-el" color="white">
               {message}
             </Typography>
-          </div>
-          <div>
-          <Typography variant="p" id="cards-el">
+          <Typography variant="p" id="cards-el" color="white">
+              
               Cards: {cards ? cards.join(', ') : ''}
           </Typography>
-          </div>
-          <div>
-            <Typography variant="p" id="sum-el">
+            <Typography variant="p" id="sum-el" color="white">
               Sum: {sum}
             </Typography>
-          </div>
+            <Typography variant="body1" id="player-el" color="white">
+            Chips {player ? `${player.name}: ${player.chips}` : ''}
+            </Typography>
+
           <StyledButton variant="contained" onClick={startGame} sx={{ mr: 2 }}>
             START GAME
           </StyledButton>
@@ -112,6 +109,12 @@ function App() {
             NEW CARD
           </StyledButton>
           <StyledTextField
+             InputProps={{
+              style: { color: 'white' }
+            }}
+            InputLabelProps={{
+              style: { color: 'white' }
+            }}
             type="number"
             id="bet-input"
             inputProps={{ min: 0 }}
@@ -121,10 +124,6 @@ function App() {
           <StyledButton variant="contained" onClick={placeBet}>
             Place Bet
           </StyledButton>
-          <Typography variant="p" id="player-el">
-              {player ? `${player.name}: ${player.chips}` : ''}
-          </Typography>
-        </div>
       </StyledContainer>
     </ThemeProvider>
   );

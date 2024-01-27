@@ -75,12 +75,12 @@ app.post('/bet', (req, res) => {
     cards = [getRandomCard(), getRandomCard()];
     sum = calculateSum(cards);
     betPlaced = true; // Set betPlaced to true
-    res.json({ message: 'Bet placed.', cards: cards, sum: sum });
+    res.json({ message: 'Bet placed.', cards: cards, sum: sum, chips: player.chips });
     console.log(sum);
 });
 
 app.get('/status', (req, res) => {
-    res.json({ player: player, cards: cards, sum: sum, isAlive: isAlive, hasBlackJack: hasBlackJack });
+    res.json({ player: player, cards: cards, sum: sum, isAlive: isAlive, hasBlackJack: hasBlackJack,chips: player.chips});
 });
 
 app.post('/new-card', (req, res) => {
