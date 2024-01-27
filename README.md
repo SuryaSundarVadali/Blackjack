@@ -1,50 +1,62 @@
 # Blackjack Game
 
-Welcome to the Blackjack Game project! This is a simple web-based implementation of the classic card game Blackjack. The game is built using HTML, CSS, and JavaScript.
+## Overview
 
-## Table of Contents
-- [Features](#features)
-- [Demo](#demo)
-- [Getting Started](#getting-started)
-- [How to Play](#how-to-play)
-- [Contributing](#contributing)
-- [License](#license)
+This project is a simple implementation of a Blackjack game using React for the frontend and Node.js with Express for the backend. The project allows players to start a game, place bets, draw cards, and determine the winner based on the Blackjack rules.
 
-## Features
+## Frontend (React)
 
-- **Betting System:** Place bets of different amounts before starting a new game.
-- **Interactive Gameplay:** Draw new cards, see the current sum, and get feedback messages.
-- **Chips System:** Track the player's chips balance throughout the game.
+### Dependencies
 
-## Demo
+- React
+- Axios
+- Material-UI (MUI)
 
-You can play the game live [here](#) (replace with your deployed application URL).
+### How to Run
 
-[![Gameplay Demo](demo-screenshot.png)](demo-screenshot.png)
+1. Install dependencies: `npm install`
+2. Run the application: `npm start`
 
-## Getting Started
+### Code Structure
 
-To run the game locally, follow these steps:
+- **App Component (App.js):** The main React component responsible for rendering the game interface.
+- **ThemeProvider and Styling:** MUI's `ThemeProvider` is used along with the `styled` function to apply styles and create a visually appealing interface.
+- **API Requests:** Axios is used for making asynchronous requests to the backend.
 
-1. Clone the repository:
+## Backend (Node.js with Express)
 
-   ```bash
-   git clone https://github.com/your-username/blackjack-game.git
+### Dependencies
+
+- Express
+- Cors
+
+### How to Run
+
+1. Install dependencies: `npm install`
+2. Run the server: `node server.js`
+
+### Code Structure
+
+- **Server (server.js):** The backend server implemented using Express.
+- **Game Logic:** Handles the game logic, such as generating random cards, calculating the sum of cards, and determining the winner.
+- **RESTful API Endpoints:**
+  - `/start-game`: Initiates a new game.
+  - `/bet`: Allows the player to place a bet.
+  - `/status`: Retrieves the current game status.
+  - `/new-card`: Draws a new card during the game.
+  - `/end-game`: Determines the winner and ends the game.
 
 ## How to Play
-Place a Bet:
 
-Click on one of the bet buttons (e.g., Bet 50, Bet 100).
-Start the Game:
+1. Start the game by clicking the "START GAME" button.
+2. Place a bet using the input field and "Place Bet" button.
+3. Draw new cards by clicking the "NEW CARD" button.
+4. End the game to see the result.
 
-Press the "Start Game" button after placing your bet.
-Gameplay:
+## Important Notes
 
-Draw new cards with the "New Card" button.
-Aim for a sum of 21 without exceeding it.
-Win chips for getting Blackjack or achieving a high sum.
-End of Game:
+- The project uses a minimalistic design with background images to enhance the gaming experience.
+- The backend simulates a simple Blackjack game with basic rules.
+- Make sure both frontend and backend are running simultaneously for proper functionality.
 
-The game ends when the player decides to stop drawing cards or goes over 21.
-Contributing
-Contributions are welcome! If you find a bug or have an enhancement in mind, please open an issue or submit a pull request. Make sure to follow the code of conduct.
+Feel free to customize and expand upon this project to add more features or improve the existing ones. Happy coding!
